@@ -2,20 +2,10 @@
     <q-page>
         <season-banner 
         v-if="SeasonsContainer"
-        :image="SeasonsContainer.thumbnail_url"
-        :title="SeasonsContainer.title.rendered"
-        :excerpt="SeasonsContainer.excerpt.rendered"
+        :image="thumbnail_url"
+        :title="name"
         />
         <q-skeleton height="250px" v-else/>
-        <q-select 
-        filled 
-        square
-        v-model="selectedSeason" 
-        :options="seasonsNames" 
-        bg-color="white" 
-        label="Scegli lo sport" 
-        label-color="cyan-9"
-        />
         <episodes-carousel 
         v-if="episodes"
         title="Gli episodi"
@@ -26,7 +16,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 //components
 import SeasonBanner from '../components/Banners/SeasonBanner.vue'
 import EpisodesCarousel from '../components/Carousels/EpisodesCarousel.vue'
@@ -38,7 +27,9 @@ export default {
             SeasonsContainer: null,
             seasonsNames: [],
             selectedSeason: null,
-            episodes: null
+            episodes: null,
+            name: null,
+            thumbnail: null
         }
     },
     components: {
@@ -47,31 +38,24 @@ export default {
         SkeletonCarousel
     },
     async mounted() {
-        this.SeasonsContainer = await axios.get(`https://www.elev8ted.it/fib/wp-json/wp/v2/tv_show/${this.$route.params.id}`)
+        this.name = this.$route.params.name
+        this.thumbnail_url = this.$route.params.image
+
+        if(!this.$route.params.name || !this.$route.params.image) {
+            this.$router.push('/')
+        }
+
+        this.SeasonsContainer = await this.$api.get(`/fib/v1/movie?movie_genre=${this.$route.params.id}`)
             .then(res => {
                 return res.data
             })
 
-        this.selectedSeason = this.SeasonsContainer.episodes[0].name
-            
-        for (let i = 0; i < this.SeasonsContainer.episodes.length; i++) {
-            this.seasonsNames.push(this.SeasonsContainer.episodes[i].name)
-        }
-    },
-    watch: {
-        selectedSeason: function(newVal, oldVal) {
-            const result = this.SeasonsContainer.episodes.filter(val => {
-                return val.name === newVal
-            })
+        const episodesJoin = this.SeasonsContainer.join()
 
-            if(result[0]) {
-                const episodesJoin = result[0].episodes.join()
-                axios.get(`https://www.elev8ted.it/fib/wp-json/wp/v2/episode?include=${episodesJoin}`)
-                    .then(res => {
-                        this.episodes = res.data
-                    })
-            }
-        }
-    }
+        this.$api.get(`/wp/v2/movie?include=${episodesJoin}`)
+            .then(res => {
+                this.episodes = res.data
+            })
+    },
 }
 </script>

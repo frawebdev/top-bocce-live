@@ -1,8 +1,12 @@
 <template>
     <div class="banner column flex-center" :style="`background-image: url(${image}), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5));`">
         <div class="text-left text-white q-pa-md">
-          <h4 class="q-mb-sm">{{ title }}</h4>
-          <p v-html="excerpt"></p>
+          <transition 
+          appear 
+          enter-active-class="animated fadeInUp"
+          >
+          <h4 class="banner-text">{{ title }}</h4>
+          </transition>
         </div>
     </div>
 </template>
@@ -10,7 +14,7 @@
 <style scoped>
 .banner {
   width: 100%;
-  height: 250px;
+  height: 40vh;
   background-color: grey;
   background-position: center;
   background-size: cover;

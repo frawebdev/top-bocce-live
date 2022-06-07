@@ -1,28 +1,38 @@
 <template>
-    <div class="banner q-mt-xl column flex-center" :style="`background-image: url(${content.image}), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)); background-blend-mode: overlay; background-position: center; background-size: cover;`">
-      <div class="text-left text-white q-pa-md" style="margin: 0 13px 0 13px;">
-        <h5 class="text-bold q-mb-md q-mt-xs">{{ content.title.rendered }}</h5>
-        <p v-html="content.excerpt.rendered"></p>
-        <q-btn
-        style="background-color: #0074a5; border-radius: 0; border: 1px solid white"
-        >
-        Vai
-        </q-btn>
+<div>
+    <div v-if="content" class="banner q-mt-xl column flex-center carousel-bg" :style="`background-image: url(${content.image}), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5));`">
+      <div class="text-left text-white q-pa-md row" style="margin: 0 13px 0 13px;">
+        <div class="col-12 col-md-6">
+          <transition 
+          appear 
+          enter-active-class="animated fadeInUp"
+          >
+          <h4 class="text-bold banner-text q-my-sm">{{ content.title.rendered }}</h4>
+          </transition>
+          <p v-html="content.excerpt.rendered" class="banner-subtitle"></p>
+          <q-btn
+          class="base-btn focusable"
+          >
+          Vai
+          </q-btn>
+        </div>
+        <div class="col">
+        </div>
       </div>
     </div>
+    <q-skeleton width="100%" height="40vh" class="banner" v-else/>
+</div>
 </template>
 
-<style scoped>
-.banner {
-  width: 100%;
-  background-color: grey;
-}
-</style>
-
 <script>
+import SkeletonCarousel from '../Carousels/SkeletonCarousel.vue'
+
 export default {
   props: [
     'content'
-  ]
+  ],
+  components: {
+    SkeletonCarousel
+  }
 }
 </script>

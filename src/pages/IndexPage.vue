@@ -1,35 +1,44 @@
 <template>
   <q-page>
     <main-carousel 
-    v-if="featuredEpisodes"
     :content="featuredEpisodes"
     />    
-    <q-skeleton width="100%" height="400px" v-else/>
-    <episodes-carousel 
-    v-if="lastEpisodes"
-    title="Gli ultimi episodi"
-    :content="lastEpisodes"
-    />
-    <skeleton-carousel v-else/>
-    <seasons-carousel 
-    v-if="lastSeasons"
-    title="Le ultime stagioni"
-    :content="lastSeasons"
-    />
-    <skeleton-carousel class="q-mt-xl" v-else/>
-    <main-banner 
-    v-if="mainBanner"
-    :content="mainBanner"
-    />
-    <q-skeleton width="100%" height="200px" v-else/>
-    <sport-carousel 
-    />
+        <episodes-carousel 
+        title="Gli ultimi episodi"
+        :content="lastEpisodes"
+        />
+        <seasons-carousel
+        title="Le ultime stagioni"
+        :content="lastSeasons"
+        />
+        <main-banner 
+        :content="mainBanner"
+        />
+        <sport-carousel 
+        title="Gli sport"
+        :sports="sports"
+        />
+        <sport-carousel 
+        title="Le rubriche"
+        :sports="shows"
+        />
   </q-page>
 </template>
 
+<style>
+.index-content-padding {
+  padding: 0;
+}
+
+@media (min-width: 1600px) {
+  .index-content-padding {
+    padding: 0 4%;
+  }
+}
+</style>
+
 <script>
 import { defineComponent } from 'vue'
-import axios from 'axios'
 //components
 import MainCarousel from '../components/Carousels/MainCarousel.vue'
 import EpisodesCarousel from '../components/Carousels/EpisodesCarousel.vue'
@@ -53,33 +62,43 @@ export default defineComponent({
       lastEpisodes: null,
       lastSeasons: null,
       featuredEpisodes: null,
-      mainBanner: null
+      mainBanner: null,
+      sports: null,
+      shows: null
     }
   },
   async mounted() {
 
-    this.featuredEpisodes = await axios.get('https://www.elev8ted.it/fib/wp-json/wp/v2/episode?per_page=3')
-      .then(res => {
-        return res.data.filter(episode => {
-          return episode.featured == 'yes'
-        })
-      })
-
-    this.lastEpisodes = await axios.get('https://www.elev8ted.it/fib/wp-json/wp/v2/episode?orderby=date')
+    this.featuredEpisodes = await this.$api.get( '/wp/v2/movie?per_page=3')
       .then(res => {
         return res.data
       })
 
-    this.lastSeasons = await axios.get('https://www.elev8ted.it/fib/wp-json/wp/v2/tv_show?orderby=date')
+    this.lastEpisodes = await this.$api.get('/wp/v2/movie?orderby=date')
       .then(res => {
         return res.data
       })
 
-      this.mainBanner = await axios.get('https://www.elev8ted.it/fib/wp-json/wp/v2/posts/241')
+    this.lastSeasons = await this.$api.get('/wp/v2/movie_genre')
       .then(res => {
         return res.data
       })
 
+    this.mainBanner = await this.$api.get('/wp/v2/posts/241')
+      .then(res => {
+        return res.data
+      })
+      
+    this.sports = await this.$api.get('/wp/v2/movie_tag?include=197,216')
+      .then(res => {
+        return res.data
+      })
+
+    this.shows = await this.$api.get('/wp/v2/movie_tag?include=229, 224')
+      .then(res => {
+        return res.data
+      })
+      
   }
 })
 </script>

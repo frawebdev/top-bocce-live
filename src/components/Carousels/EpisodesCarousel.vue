@@ -1,6 +1,19 @@
 <template>
-    <div class="q-ma-lg">
-    <h4 class="q-mb-sm text-white text-uppercase text-bold">{{ title }}</h4>
+  <main class="carousel-x-padding">
+    <div class="q-ma-lg" v-if="content">
+    <transition
+    appear 
+    enter-active-class="animated fadeInUp"
+    >
+    <h4 class="q-mb-sm text-white text-bold">{{ title }} 
+      <br>
+      <span class="text-subtitle2">
+        <router-link :to="{ name: 'view-all-episodes' }" style="text-decoration: none; color: grey;">
+          Guarda tutti
+        </router-link>
+      </span>
+    </h4>
+    </transition>
     <swiper
         :modules="modules"
         :space-between="20"
@@ -8,46 +21,48 @@
         :breakpoints="{
             640: {
                 slidesPerView: 3
+            },
+            1200: {
+                slidesPerView: 4
             }
         }"
-        @swiper="onSwiper"
-        @slideChange="onSlideChange"
-    >
-        <swiper-slide :style="`background-color: grey;background-image: url('${episode.thumbnail_url}'), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)); background-blend-mode: overlay; background-size: cover; background-position: center; height:200px;`" v-for="episode in content" :key="episode.id">
-          <div class="column flex-center" style="height: 100%; width: 100%;">
-              <div style="margin: 5% 10% 5% 10%;" class="text-white">
-                  <h6 class="q-ma-xs text-bold" v-if="episode.title.rendered">{{ episode.title.rendered }}</h6>
-                  <h6 class="q-ma-xs text-bold" v-else-if="episode.title">{{ episode.title }}</h6>
-                  <div v-html="episode.excerpt.rendered" v-if="episode.excerpt.rendered"></div>
-                  <div v-html="episode.excerpt" v-else-if="episode.excerpt"></div>
-                  <q-btn
-                  style="background-color: #0074a5; border-radius: 0; border: 1px solid white"
-                  v-if="episode.episode_url" 
-                  class="q-mt-md"
-                  :to="{ name: 'video', params: { id: episode.episode_url, sport: episode.episode_sport } }"
-                  >
-                  Vai
-                  </q-btn>
-                  <p v-else> 
-                  Non Disponibile
-                  </p>
+        >
+        <swiper-slide 
+        :style="`background-image: url('${episode.thumbnail_url}'), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5));`" 
+        v-for="episode in content" 
+        class="carousel-bg-sm"
+        :class="episode.video_url ? '' : 'avaliability'"
+        :key="episode.id"
+        @click="$router.push({ name: 'video', params: { id: episode.video_url, sport: episode.movie_genre[0], name: episode.title.rendered } })"
+        >
+          <router-link 
+          class="column justify-center focusable" style="height: 100%; width: 100%;"
+          :to="{ name: 'video', params: { id: episode.video_url || null, sport: episode.movie_genre[0], name: episode.title.rendered } }"
+          >
+              <div style="margin: 5% 10% 5% 10%;" class="text-white text-center">
+                  <h6 class="q-my-xs text-bold" v-if="episode.title.rendered" v-html="episode.title.rendered"></h6>
+                  <h6 class="q-my-xs text-bold" v-else-if="episode.title">{{ episode.title }}</h6>
               </div>
-          </div>
+          </router-link>
         </swiper-slide>
     </swiper>
     </div>
+    <div v-else>
+      <skeleton-carousel />
+    </div>
+  </main>
 </template>
+
 <script>
   import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
   import { Swiper, SwiperSlide } from 'swiper/vue'
+  import SkeletonCarousel from '../Carousels/SkeletonCarousel.vue'
 
   // Import Swiper styles
   import 'swiper/css';
   import 'swiper/css/navigation';
   import 'swiper/css/pagination';
   import 'swiper/css/scrollbar';
-
-  //components
 
   // Import Swiper styles
   export default {
@@ -57,7 +72,8 @@
     ],
     components: {
       Swiper,
-      SwiperSlide
+      SwiperSlide,
+      SkeletonCarousel
     },
     setup() {
       return {

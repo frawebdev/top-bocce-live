@@ -1,0 +1,12 @@
+{
+  "name": "topbocce-app",
+  "version": "0.0.1",
+  "description": "Piattaforma di streaming per la Federazione Italiana Bocce",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^2.5.0",
+    "@capacitor/cli": "^2.0.0",
+    "@capacitor/core": "^2.0.0"
+  },
+  "author": ""
+}

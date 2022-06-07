@@ -1,88 +1,72 @@
 <template>
-    <div class="q-ma-lg">
-    <h4 class="q-mb-sm text-white text-uppercase text-bold">Gli sport</h4>
+<div class="carousel-x-padding">
+    <div class="q-ma-lg" v-if="sports">
+    <transition
+    appear 
+    enter-active-class="animated fadeInUp"
+    >
+    <h4 class="q-mb-sm text-white text-bold">{{ title }}</h4>
+    </transition>
     <swiper
         :modules="modules"
         :space-between="20"
         navigation
-        :breakpoints="{
-            640: {
-                slidesPerView: 3
-            }
-        }"
-        @swiper="onSwiper"
-        @slideChange="onSlideChange"
+        :slidesPerView='1'
     >
-        <swiper-slide :style="`background-color: grey;background-image: url(''); background-size: cover; background-position: center; height:200px;`">
-          <div class="column flex-center text-white" style="height: 100%; width: 100%;">
+        <swiper-slide 
+        v-for="sport in sports" :key="sport.id"
+        :style="`background-image: url('${sport.thumbnail_url}'), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5));`"
+        class="carousel-sport"
+        >
+          <router-link 
+          :to="{ name: 'sport', params: { id: sport.id }, props: { name: sport.name } }"
+          class="column justify-center text-white focusable" style="height: 100%; width: 100%;"
+          >
               <div style="margin: 0 13px 0 13px;">
-                  <h6 class="q-ma-xs text-bold">Sport 1</h6>
-                  <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, et!</div>
-                  <q-btn
-                  v-ripple
-                  style="background-color: #0074a5; border-radius: 0; border: 1px solid white"
-                  class="q-mt-md text-white"
-                  :to="{ name: 'sport', params: { name: 'sport_1' } }"
+                  <transition 
+                  appear 
+                  enter-active-class="animated fadeInUp"
                   >
-                  Vai
-                  </q-btn>
+                  <h6 class="q-ma-xs text-bold title-size text-center">{{ sport.name }}</h6>
+                  </transition>
               </div>
-          </div>
-        </swiper-slide>
-        <swiper-slide :style="`background-color: grey;background-image: url(''); background-size: cover; background-position: center; height:200px;`">
-          <div class="column flex-center text-white" style="height: 100%; width: 100%;">
-              <div style="margin: 0 13px 0 13px;">
-                  <h6 class="q-ma-xs text-bold">Sport 2</h6>
-                  <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, et!</div>
-                  <q-btn
-                  v-ripple
-                  style="background-color: #0074a5; border-radius: 0; border: 1px solid white"
-                  class="q-mt-md text-white"
-                  :to="{ name: 'sport', params: { name: 'sport_2' } }"
-                  >
-                  Vai
-                  </q-btn>
-              </div>
-          </div>
-        </swiper-slide>
-        <swiper-slide :style="`background-color: grey;background-image: url(''); background-size: cover; background-position: center; height:200px;`">
-          <div class="column flex-center text-white" style="height: 100%; width: 100%;">
-              <div style="margin: 0 13px 0 13px;">
-                  <h6 class="q-ma-xs text-bold">Sport 3</h6>
-                  <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, et!</div>
-                  <q-btn
-                  v-ripple
-                  style="background-color: #0074a5; border-radius: 0; border: 1px solid white"
-                  class="q-mt-md text-white"
-                  :to="{ name: 'sport', params: { name: 'sport_3' } }"
-                  >
-                  Vai
-                  </q-btn>
-              </div>
-          </div>
-        </swiper-slide>
-        <swiper-slide :style="`background-color: grey;background-image: url(''); background-size: cover; background-position: center; height:200px;`">
-          <div class="column flex-center text-white" style="height: 100%; width: 100%;">
-              <div style="margin: 0 13px 0 13px;">
-                  <h6 class="q-ma-xs text-bold">Sport 4</h6>
-                  <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, et!</div>
-                  <q-btn
-                  v-ripple
-                  style="background-color: #0074a5; border-radius: 0; border: 1px solid white"
-                  class="q-mt-md text-white"
-                  :to="{ name: 'sport', params: { name: 'sport_4' } }"
-                  >
-                  Vai
-                  </q-btn>
-              </div>
-          </div>
+          </router-link >
         </swiper-slide>
     </swiper>
     </div>
+    <div v-else>
+      <skeleton-carousel />
+    </div>
+</div>
 </template>
+
+<style scoped>
+
+.title-size {
+  font-size:1.6rem;
+}
+
+@media (min-width: 600px) {
+
+.car-height {
+  height: 40vh;
+}
+}
+
+@media (min-width: 1000px) {
+
+.title-size {
+  font-size: 4rem;
+  margin-bottom: 1.6rem;
+}
+
+}
+</style>
+
 <script>
   import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
   import { Swiper, SwiperSlide } from 'swiper/vue'
+  import SkeletonCarousel from '../Carousels/SkeletonCarousel.vue'
 
   // Import Swiper styles
   import 'swiper/css';
@@ -96,16 +80,44 @@
   export default {
     props: [
         'title',
-        'content'
+        'sports',
     ],
     components: {
       Swiper,
-      SwiperSlide
+      SwiperSlide,
+      SkeletonCarousel
+      
     },
     setup() {
       return {
         modules: [Navigation, Pagination, Scrollbar, A11y],
       }
     },
+    computed: {
+      slidesMin() {
+        let slides
+
+        if(this.sports && this.sports.length > 3) {
+          slides = 4
+        }
+        else if(this.sports && this.sports.length == 2) {
+          slides = 2
+        }
+        else {
+          slides = 3
+        }
+
+        return slides
+      },
+      slidesMax() {
+        let slides = 3
+
+        if(this.sports && this.sports.length <= 2) {
+          slides = 2
+        }
+
+        return slides
+      }
+    }
   }
 </script>

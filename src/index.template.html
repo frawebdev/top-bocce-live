@@ -18,6 +18,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet"> 
+
+    <script src="https://luke-chang.github.io/js-spatial-navigation/spatial_navigation.js" defer></script>
+    <script defer>
+      window.addEventListener('load', function() {
+
+        if(window.innerWidth > 1600) {
+        // Initialize
+        SpatialNavigation.init();
+   
+        // Define navigable elements (anchors and elements with "focusable" class).
+        SpatialNavigation.add({
+          selector: '.focusable'
+        });
+   
+        // Make the *currently existing* navigable elements focusable.
+        SpatialNavigation.makeFocusable();
+   
+        // Focus the first navigable element.
+        SpatialNavigation.focus();
+        }
+
+      });
+    </script> 
   </head>
   <body>
     <!-- DO NOT touch the following DIV -->

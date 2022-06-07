@@ -1,1 +1,148 @@
 // app global css in SCSS form
+
+//carousels
+
+.carousel-x-padding {
+  padding: 0;
+}
+
+.carousel-bg {
+  background-color: grey;
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position: center;
+  height: 60vh !important;
+}
+
+.carousel-bg-sm {
+  background-color: grey;
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position: center;
+  height: 200px !important;
+}
+
+.carousel-bg-sm:hover {
+  background-size: 120%;
+  cursor: pointer;
+}
+
+.carousel-bg-sm:focus {
+  background-size: 105%;
+}
+
+.carousel-sport {
+  background-color: grey;
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position: center;
+  height: 200px !important;
+}
+
+.carousel-sport:hover {
+  background-size: 105%;
+  cursor: pointer;
+}
+
+@media (min-width: 600px) {
+  .carousel-sport {
+    height: 25vh !important;
+  }
+  }
+
+  @media (min-width: 1000px) {
+    .carousel-sport {
+      height: 40vh !important;
+    }
+    }
+
+//banners
+.banner {
+    width: 100%;
+    height: auto;
+  }
+
+  .banner-text {
+    font-size: 1.5rem;
+    line-height: 1;
+    text-transform: none;
+  }
+
+  .banner-subtitle {
+
+  }
+  
+  @media (min-width: 600px) {
+    .banner {
+      height: 20rem;
+    }
+  }
+  
+  @media (min-width: 1300px) {
+    .banner {
+      height: 30rem;
+    }
+  }
+
+  @media (min-width: 600px) {
+    .banner-text {
+      font-size: 3rem;
+    }
+
+    .banner-subtitle {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .banner-text {
+      font-size: 4rem;
+    }
+  }
+
+//button
+
+.base-btn {
+  background-color: #0074a5;
+  border-radius: 0;
+  border: 1px solid white;
+}
+
+@media (min-width: 900px) {
+  .base-btn {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 800px) {
+  p, a {
+    font-size: 1rem;
+    color: grey;
+  }
+}
+
+//swiper
+
+.swiper-button-next {
+  width: 10px !important;
+}
+
+//focus btn
+
+@media (min-width: 1000px) {
+  .focus-btn:focus {
+    background-color: #0074a5;
+  }
+}
+
+// grid
+
+.my-card:hover {
+  cursor: pointer;
+}
+  
+
+.avaliability {
+  filter: grayscale(100%);
+  cursor: auto;
+}
