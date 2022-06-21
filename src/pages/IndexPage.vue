@@ -84,7 +84,7 @@ export default defineComponent({
         return res.data
       })
 
-    this.mainBanner = await this.$api.get('/wp/v2/posts/241')
+    this.mainBanner = await this.$api.get('/wp/v2/video')
       .then(res => {
         return res.data
       })
@@ -94,7 +94,7 @@ export default defineComponent({
         return res.data
       })
 
-    this.shows = await this.$api.get('/wp/v2/movie_tag?include=229, 224')
+    this.shows = await this.$api.get('/wp/v2/movie_tag?include=229,224')
       .then(res => {
         return res.data
       })

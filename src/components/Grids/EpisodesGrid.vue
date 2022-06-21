@@ -1,6 +1,7 @@
 <template>
     <div class="q-ma-md">
-        <div class="q-pa-md flex flex-center">
+        <div class="q-pa-md flex flex-center"
+            >
             <q-pagination 
             v-model="currentPage"
             :max="pages"
@@ -15,17 +16,24 @@
             :key="episode.id"
             @click="redirectTo(episode)"
             >
-            <q-img :src="episode.thumbnail_url" class="bg-grey" :class="episode.video_url || episode.name ? '' : 'avaliability'">
+            <q-img v-if="episode.thumbnail_url" :src="episode.thumbnail_url" class="bg-grey">
                 <div class="absolute-bottom column justify-center" style="height: 100%;">
                     <div>
                         <div v-if="episode.title">
-                            <div class="text-h6 text-center" v-html="episode.title.rendered"></div>
+                            <div class="text-h5 text-center" v-html="episode.title.rendered"></div>
                         </div>
                         <div v-if="episode.name">
-                            <div class="text-h6 text-center">{{ episode.name }}</div>
+                            <div class="text-h5 text-center">{{ episode.name }}</div>
                         </div>
-                        <div v-if="!episode.video_url && !episode.name" class="text-center text-grey">
+                        <div v-if="!episode.video_url && !episode.name && episode.is_live === null" class="text-center text-grey">
                             Non disponibile
+                        </div>
+                        <div v-else-if="episode.is_live === 1" class="text-center live-now text-bold">
+                            <button><p>LIVE ORA</p></button>
+                        </div>
+                        <div v-else-if="episode.is_live === 0" class="text-center">
+                            Programmato per 01/01/22<br>
+                            Alle 12:00
                         </div>
                     </div>
                 </div>
@@ -77,9 +85,49 @@
     </div>
 </template>
 
+<style>
+
+.live-now button {
+    background-color: red;
+    border: none;
+}
+
+.live-now button p {
+    color: white;
+    padding: 0.5rem;
+    font-size: 1.3rem;
+    margin: 0;
+    animation-name: zoomin;
+    animation-duration: 1s;
+    animation-iteration-count:infinite;
+}
+
+@keyframes zoomin {
+    from {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+</style>
+
 <script>
 export default {
-    props: ['episodes', 'pages'],
+    // props: ['episodes', 'pages'],
+    props: {
+        episodes: {
+            type: Object,
+            default: null
+        },
+        pages: {
+            type: Number,
+            default: 1
+        }
+    },
     data() {
         return {
             currentPage: 1
@@ -90,8 +138,11 @@ export default {
             if(ep.taxonomy) {
                 this.$router.push({ name: 'season', params: { id: ep.slug, name: ep.name, image: ep.thumbnail_url } })
             } 
-            else if (ep.video_url) {
+            else if (ep.video_url && !ep.embed_url) {
                 this.$router.push({ name: 'video', params: { id: ep.video_url, sport: ep.episode_sport, name: ep.title.rendered } })
+            }
+            else if (ep.embed_url) {
+                this.$router.push({ name: 'video', params: { id: ep.embed_url, sport: ep.episode_sport, name: ep.title.rendered } })
             }
         }   
     },

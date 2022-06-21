@@ -1,6 +1,6 @@
 {
   "appId": "live.topbocce.app",
-  "appName": "Fib",
+  "appName": "Top Bocce Live",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www"

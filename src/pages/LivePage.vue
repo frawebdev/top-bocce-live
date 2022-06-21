@@ -1,10 +1,10 @@
 <template>
     <q-page>
         <sport-banner 
-            title="Stagioni"
+            title="Eventi live"
         />
             <episodes-grid 
-            :episodes="episodes"
+            :episodes="sortedEpisodes"
             :pages="episodesPages"
             @changePage="getNPage"
             />
@@ -25,11 +25,11 @@ export default {
         return {
             episodes: null,
             episodesPages: 0,
-            filteredEpisodes: null
+            filteredEpisodes: {}
         }
     },
     async mounted() {
-        this.episodes = await this.$api.get(`/wp/v2/movie_genre`)
+        this.episodes = await this.$api.get(`/wp/v2/video`)
             .then(res => {
                 this.episodesPages = parseInt(res.headers['x-wp-totalpages'])
                 return res.data
@@ -39,8 +39,15 @@ export default {
     methods: {
         async getNPage(page) {
             this.episodes = null
-            this.episodes = await this.$api.get(`/wp/v2/movie_genre?page=${page}`)
+            this.episodes = await this.$api.get(`/wp/v2/video?page=${page}`)
                 .then(res => res.data)
+        }
+    },
+    computed: {
+        sortedEpisodes: function() {
+            if(this.episodes) {
+                return this.episodes.sort((a, b) => (a.is_live > b.is_live ? -1 : 1))
+            }
         }
     }
 }

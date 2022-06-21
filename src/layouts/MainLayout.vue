@@ -1,6 +1,24 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-footer elevated style="background-color: #353535;" v-if="$route.name !== 'video'">
+    <q-header class="slideDownAnimation" elevated style="background-color: #0199da;" v-if="videos && $route.name !== 'live-page' && $route.name !== 'video'">
+      <q-toolbar class="row">
+        <div class="col-8 col-md-10 row" style="overflow: hidden;">
+          <p class="q-my-none q-mr-md scrolling-titles">
+            <span v-for="event in filterLiveNowEvents" :key="event.id"> 
+              - {{ event.title.rendered }} - 
+            </span>
+          </p>
+        </div>
+        <q-btn 
+        class="flashy-btn col-4 col-md-2" 
+        color="red-6"
+        :to="{ name: 'live-page' }"
+        >
+        live ora
+        <q-icon name="circle" size="12px" class="q-ml-sm"/></q-btn>
+      </q-toolbar>
+    </q-header>
+    <q-footer elevated style="background-color: #353535;" class="q-pb-sm" v-if="$route.name !== 'video'">
       <q-toolbar class="row justify-around">
         <q-btn
         flat
@@ -19,10 +37,74 @@
         flat
         dense
         round
-        icon="search"
-        @click="searchFilter = true"
-        class="focusable focus-btn"
-        />
+        icon="menu"
+        >
+          <q-menu>
+            <q-list style="min-width: 300px">
+              <q-item 
+              clickable 
+              >
+                <q-item-section>Discipline</q-item-section>
+                  <q-menu dark auto-close anchor="top middle" self="top middle">
+                    <q-list style="min-width: 300px">
+                      <q-item
+                      :to="{ name: 'sport', params: { id: 216 }, props: { name: 'Volo' } }"
+                      >
+                        <q-item-section>
+                          Volo
+                        </q-item-section>
+                      </q-item>
+                      <q-separator />
+                      <q-item
+                      :to="{ name: 'sport', params: { id: 197 }, props: { name: 'Raffa' } }"
+                      >
+                        <q-item-section>
+                          Raffa
+                        </q-item-section>
+                      </q-item>
+                      <q-separator />
+                    </q-list>
+                  </q-menu>
+              </q-item>
+              <q-item 
+              clickable 
+              >
+              <q-item-section>Rubriche</q-item-section>
+                <q-menu dark auto-close anchor="top middle" self="top middle">
+                  <q-list style="min-width: 300px">
+                    <q-item
+                    :to="{ name: 'sport', params: { id: 229 }, props: { name: 'Bocce Mon Amour' } }"
+                    >
+                      <q-item-section>
+                        Bocce Mon Amour
+                      </q-item-section>
+                    </q-item>
+                    <q-separator />
+                    <q-item
+                    :to="{ name: 'sport', params: { id: 224 }, props: { name: 'Boccia e Risposta' } }"
+                    >
+                      <q-item-section>
+                        Boccia e Risposta
+                      </q-item-section>
+                    </q-item>
+                    <q-separator />
+                  </q-list>
+                </q-menu>
+            </q-item>
+            <q-separator />
+            <q-item 
+            clickable 
+            v-close-popup
+            @click="searchFilter = true"
+            >
+              <q-item-section>Cerca</q-item-section>
+              <q-item-section avatar>
+                <q-icon name="search" />
+              </q-item-section>
+            </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </q-toolbar>
     </q-footer>
 
@@ -43,7 +125,7 @@
               :key="item.title"
               clickable 
               v-ripple
-              :to="{ name: 'video', params:{ 'id': item.video_url, 'sport': item.episode_sport } }"
+              @click="redirectTo(item)"
               class="focusable"
               >
                 <q-item-section>
@@ -76,30 +158,87 @@ h1, h2, h3, h4, h5, h6 {
 .swiper-button-prev {
   color: #0074a5;
 }
+
+.flashy-btn .q-icon {
+  animation-name: flash;
+  animation-iteration-count: infinite;
+  animation-duration: 1.5s;
+}
+
+@keyframes flash {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.scrolling-titles {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.scrolling-titles span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: moving 5s linear infinite;
+}
+
+@keyframes moving {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
 </style>
 
 <script>
-import { defineComponent, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { defineComponent, ref, watch, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup () {
-    const router = useRouter()
+    const route = useRoute()
 
+    const screenSize = ref(null)
     const leftDrawerOpen = ref(false)
     const filterSelect = ref(null)
     const searchValue = ref('')
     const searchResult = ref(null)
     const searchError = ref(null)
     const loadingData = ref(false)
+    const videos = ref(null)
+
+    onMounted(() => {
+      screenSize.value = window.innerWidth
+
+      axios.get(`https://fast-peak-73010.herokuapp.com/https://topbocce.live/wp-json/wp/v2/video`)
+        .then(res => videos.value = res)
+        .catch(err => console.log(err))
+    })
+
+    const filterLiveNowEvents = computed(() => {
+      if(videos.value.data) {
+        return videos.value.data.filter(video => video.is_live === 1)
+      }
+    })
 
     watch(searchValue, async (newVal, oldVal) => {
       if(newVal.length >= 3) {
         loadingData.value = true
-        searchResult.value = await axios.get('https://www.topbocce.live/wp-json/fib/v1/search?term=' + newVal)
+        searchResult.value = await axios.get('https://fast-peak-73010.herokuapp.com/https://www.topbocce.live/wp-json/fib/v1/search?term=' + newVal)
         .then(res => {
           loadingData.value = false
           let filteredData = res.data.filter(res => res.video_url)
@@ -112,6 +251,9 @@ export default defineComponent({
     })
 
     return {
+      filterLiveNowEvents,
+      videos,
+      screenSize,
       filterSelect,
       searchValue,
       searchError,
@@ -123,6 +265,16 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
+  },
+  methods: {
+      redirectTo(ep) {
+        if (ep.video_url && !ep.embed_url) {
+          this.$router.push({ name: 'video', params: { id: ep.video_url, name: ep.title.rendered } })
+        }
+        else if (ep.embed_url) {
+          this.$router.push({ name: 'video', params: { id: ep.embed_url, name: ep.title.rendered } })
+        }
+      }
   }
 })
 </script>

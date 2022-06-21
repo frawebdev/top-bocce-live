@@ -5,9 +5,9 @@
     appear 
     enter-active-class="animated fadeInUp"
     >
-    <h4 class="q-mb-sm text-white text-bold">{{ title }} 
+    <h4 class="q-mb-sm text-white text-bold fadeInAnimation">{{ title }} 
       <br>
-      <span class="text-subtitle2">
+      <span class="view-all-text">
         <router-link :to="{ name: 'view-all-episodes' }" style="text-decoration: none; color: grey;">
           Guarda tutti
         </router-link>
@@ -15,10 +15,14 @@
     </h4>
     </transition>
     <swiper
+    class="fadeInAnimation"
         :modules="modules"
         :space-between="20"
-        navigation
+        :navigation="showNav"
         :breakpoints="{
+            0: {
+              slidesPerView: 1.1
+            },
             640: {
                 slidesPerView: 3
             },
@@ -31,13 +35,14 @@
         :style="`background-image: url('${episode.thumbnail_url}'), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5));`" 
         v-for="episode in content" 
         class="carousel-bg-sm"
-        :class="episode.video_url ? '' : 'avaliability'"
+        :class="episode.video_url || episode.embed_url ? '' : 'avaliability'"
         :key="episode.id"
-        @click="$router.push({ name: 'video', params: { id: episode.video_url, sport: episode.movie_genre[0], name: episode.title.rendered } })"
+        @click="redirectTo(episode)"
+        @keyup="remoteClick($event, episode.video_url, episode.movie_genre[0], episode.title.rendered)"
         >
           <router-link 
-          class="column justify-center focusable" style="height: 100%; width: 100%;"
-          :to="{ name: 'video', params: { id: episode.video_url || null, sport: episode.movie_genre[0], name: episode.title.rendered } }"
+          class="column justify-center focusable link-style"
+          :to="{ name: 'video', params: { id: episode.video_url || null, sport: episode.movie_genre[0] || null, name: episode.title.rendered } }"
           >
               <div style="margin: 5% 10% 5% 10%;" class="text-white text-center">
                   <h6 class="q-my-xs text-bold" v-if="episode.title.rendered" v-html="episode.title.rendered"></h6>
@@ -74,6 +79,32 @@
       Swiper,
       SwiperSlide,
       SkeletonCarousel
+    },
+    methods: {
+      remoteClick(e, video_url, genre, title) {
+        if(e.keyCode === 13) {
+          alert(e.keyCode)
+          this.$router.push({ name: 'video', params: { id: video_url, sport: genre, name: title } })
+        }
+      },
+      redirectTo(ep) {
+        if (ep.video_url && !ep.embed_url) {
+          this.$router.push({ name: 'video', params: { id: ep.video_url, name: ep.title.rendered } })
+        }
+        else if (ep.embed_url) {
+          this.$router.push({ name: 'video', params: { id: ep.embed_url, name: ep.title.rendered } })
+        }
+      }
+    },
+    computed: {
+        showNav() {
+        if(window.innerWidth <= 600) {
+          return false
+        }
+        else if(window.innerWidth > 600) {
+          return true
+        }
+      }
     },
     setup() {
       return {

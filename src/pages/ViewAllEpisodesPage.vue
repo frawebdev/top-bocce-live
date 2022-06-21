@@ -23,15 +23,15 @@ export default {
     },
     data() {
         return {
-            episodes: null,
+            episodes: {},
             episodesPages: 0,
-            filteredEpisodes: null
+            filteredEpisodes: {}
         }
     },
     async mounted() {
         this.episodes = await this.$api.get(`/wp/v2/movie`)
             .then(res => {
-                this.episodesPages = res.headers['x-wp-totalpages']
+                this.episodesPages = parseInt(res.headers['x-wp-totalpages'])
                 return res.data
             })
             .catch(err => console.log(err))

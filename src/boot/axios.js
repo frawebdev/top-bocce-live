@@ -22,3 +22,5 @@ export default boot(({ app }) => {
 })
 
 export { api }
+
+//https://fast-peak-73010.herokuapp.com/

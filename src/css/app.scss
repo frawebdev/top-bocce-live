@@ -1,5 +1,22 @@
 // app global css in SCSS form
 
+//base
+
+.view-all-text {
+  font-size: 1.2rem;
+}
+
+@media (min-width: 1900px) {
+
+  .view-all-text {
+    font-size: 2rem;
+  }
+
+  h6 {
+    font-size: 2rem;
+  }
+}
+
 //carousels
 
 .carousel-x-padding {
@@ -20,6 +37,13 @@
   background-size: cover;
   background-position: center;
   height: 200px !important;
+}
+
+@media (min-width: 2000px) {
+  .carousel-bg-sm {
+    height: 350px !important;
+    
+  }
 }
 
 .carousel-bg-sm:hover {
@@ -50,11 +74,11 @@
   }
   }
 
-  @media (min-width: 1000px) {
-    .carousel-sport {
-      height: 40vh !important;
-    }
-    }
+@media (min-width: 1000px) {
+  .carousel-sport {
+    height: 40vh !important;
+  }
+  }
 
 //banners
 .banner {
@@ -63,7 +87,7 @@
   }
 
   .banner-text {
-    font-size: 1.5rem;
+    font-size: 2.8rem;
     line-height: 1;
     text-transform: none;
   }
@@ -117,7 +141,6 @@
 @media (min-width: 800px) {
   p, a {
     font-size: 1rem;
-    color: grey;
   }
 }
 
@@ -125,6 +148,28 @@
 
 .swiper-button-next {
   width: 10px !important;
+  &:after {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 3px;
+  }
+}
+
+.swiper-button-prev {
+  width: 10px !important;
+  &:after {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 3px;
+  }
+}
+
+.link-style {
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
 }
 
 //focus btn
@@ -143,6 +188,70 @@
   
 
 .avaliability {
-  filter: grayscale(100%);
-  cursor: auto;
+  display: none;
+}
+
+//animations
+
+.fadeInAnimation {
+  animation-name: fadeInAnimation;
+  animation-duration: 1s;
+}
+
+@keyframes fadeInAnimation{
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.slideDownAnimation {
+  animation-name: slideDownAnimation;
+  animation-duration: 1s;
+}
+
+@keyframes slideDownAnimation {
+  from {
+    opacity: 0;
+    top: -50px;
+  }
+  to {
+    opacity: 1;
+    top: 0px;
+  }
+}
+
+.slideUpAnimation {
+  animation-name: slideUpAnimation;
+  animation-duration: 1s;
+}
+
+@keyframes slideUpAnimation {
+  from {
+    opacity: 0;
+    top: 50px;
+  }
+  to {
+    opacity: 1;
+    top: 0px;
+  }
+}
+
+//videos
+
+.video-position {
+  position: fixed;
+  top:0; 
+  left:0; 
+  bottom:0; 
+  right:0; 
+  width:100%; 
+  height:100%; 
+  border:none; 
+  margin:0; 
+  padding:0;
+  overflow:hidden; 
+  z-index:1;
 }

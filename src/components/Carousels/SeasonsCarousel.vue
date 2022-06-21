@@ -1,24 +1,23 @@
 <template>
     <main class="carousel-x-padding">
       <div class="q-ma-lg" v-if="content">
-      <transition
-      appear 
-      enter-active-class="animated fadeInUp"
-      >
-      <h4 class="q-mb-sm text-white text-bold">{{ title }}
+      <h4 class="q-mb-sm text-white text-bold fadeInAnimation">{{ title }}
         <br>
-        <span class="text-subtitle2">
+        <span class="view-all-text">
           <router-link :to="{ name: 'view-all-seasons' }" style="text-decoration: none; color: grey;">
             Guarda tutti
           </router-link>
         </span>
       </h4>
-      </transition>
       <swiper
+      class="fadeInAnimation"
           :modules="modules"
           :space-between="20"
-          navigation
+          :navigation="showNav"
           :breakpoints="{
+              0: {
+                  slidesPerView: 1.1
+              },
               640: {
                   slidesPerView: 3
               },
@@ -35,8 +34,7 @@
           >
             <router-link 
             :to="{ name: 'season', params: { id: season.slug, name: season.name, image: season.thumbnail_url } }"
-            class="column justify-center text-white text-center focusable" 
-            style="height: 100%; width: 100%;"
+            class="column justify-center text-white text-center focusable link-style" 
             >
                 <div style="margin: 5px 13px;">
                     <h6 class="q-ma-xs text-bold">{{ season.name }}</h6> 
@@ -73,6 +71,16 @@
       Swiper,
       SwiperSlide,
       SkeletonCarousel
+    },
+    computed: {
+        showNav() {
+        if(window.innerWidth <= 600) {
+          return false
+        }
+        else if(window.innerWidth > 600) {
+          return true
+        }
+      }
     },
     setup() {
       return {

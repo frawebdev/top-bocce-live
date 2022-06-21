@@ -9,7 +9,8 @@ const routes = [
       { path: 'season/:id', component: () => import('pages/SeasonPage.vue'), name: 'season' },
       { path: 'sport/:id', component: () => import('pages/SportPage.vue'), name: 'sport', props: true },
       { path: 'view-all-episodes', component: () => import('pages/ViewAllEpisodesPage.vue'), name: 'view-all-episodes' },
-      { path: 'view-all-seasons', component: () => import('pages/ViewAllSeasonsPage.vue'), name: 'view-all-seasons' }
+      { path: 'view-all-seasons', component: () => import('pages/ViewAllSeasonsPage.vue'), name: 'view-all-seasons' },
+      { path: 'view-all-live', component: () => import('pages/LivePage.vue'), name: 'live-page' }
     ]
   },
 

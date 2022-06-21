@@ -1,17 +1,13 @@
 <template>
 <div class="carousel-x-padding">
     <div class="q-ma-lg" v-if="sports">
-    <transition
-    appear 
-    enter-active-class="animated fadeInUp"
-    >
-    <h4 class="q-mb-sm text-white text-bold">{{ title }}</h4>
-    </transition>
+    <h4 class="q-mb-sm text-white text-bold fadeInAnimation">{{ title }}</h4>
     <swiper
+    class="fadeInAnimation"
         :modules="modules"
         :space-between="20"
-        navigation
-        :slidesPerView='1'
+        :slidesPerView='1.1'
+        :navigation="showNav"
     >
         <swiper-slide 
         v-for="sport in sports" :key="sport.id"
@@ -20,15 +16,10 @@
         >
           <router-link 
           :to="{ name: 'sport', params: { id: sport.id }, props: { name: sport.name } }"
-          class="column justify-center text-white focusable" style="height: 100%; width: 100%;"
+          class="column justify-center text-white focusable" style="height: 100%; width: 100%; text-decoration: none;"
           >
               <div style="margin: 0 13px 0 13px;">
-                  <transition 
-                  appear 
-                  enter-active-class="animated fadeInUp"
-                  >
                   <h6 class="q-ma-xs text-bold title-size text-center">{{ sport.name }}</h6>
-                  </transition>
               </div>
           </router-link >
         </swiper-slide>
@@ -47,19 +38,16 @@
 }
 
 @media (min-width: 600px) {
-
-.car-height {
-  height: 40vh;
-}
+  .car-height {
+    height: 40vh;
+  }
 }
 
 @media (min-width: 1000px) {
-
-.title-size {
-  font-size: 4rem;
-  margin-bottom: 1.6rem;
-}
-
+  .title-size {
+    font-size: 4rem;
+    margin-bottom: 1.6rem;
+  }
 }
 </style>
 
@@ -117,6 +105,14 @@
         }
 
         return slides
+      },
+      showNav() {
+        if(window.innerWidth <= 600) {
+          return false
+        }
+        else if(window.innerWidth > 600) {
+          return true
+        }
       }
     }
   }
