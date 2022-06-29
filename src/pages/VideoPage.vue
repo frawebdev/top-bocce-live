@@ -1,8 +1,8 @@
 <template>
     <q-page class="column flex-center">
         <q-header style="background-color: transparent;">
-            <q-toolbar>
-                <button class="video-back-btn q-mx-sm" @click="$router.go(-1)"><q-icon name="arrow_back" /></button>
+            <q-toolbar style="padding-left: 0;">
+                <button class="video-back-btn" @click="$router.go(-1)"><q-icon name="arrow_back" /></button>
             </q-toolbar>
         </q-header>
         <FromVimeoLink 
@@ -20,7 +20,7 @@
         allowfullscreen
         class="fadeInAnimation video-position"
         />
-        <q-page-sticky position="bottom" :offset="[0, 35]" v-if="screenSize > 1500">
+        <q-page-sticky position="bottom" style="z-index: 2;" :offset="[0, 35]" v-if="screenSize > 1500">
             <button class="btn-style focusable q-mx-sm" @click="$router.go(-1)"><q-icon name="close" /></button>
             <button class="player-style focusable q-mx-sm" @click="$refs.videoPlayer.currentTime = $refs.videoPlayer.currentTime - 10"><q-icon name="fast_rewind" /></button>
             <button 
@@ -68,12 +68,12 @@
 }
 
 .video-back-btn {
+    background-color: transparent;
     border: none;
-    background-color: #0074a5;
     margin-top: 8px;
     border-radius: 5px;
-    font-size: 1.5rem;
-    color: white;
+    font-size: 3.5rem;
+    color: #0074a5;
     border-radius: 50%;
     z-index: 999;
     width: 50px;
@@ -104,6 +104,9 @@ export default {
         }
     },
     mounted() {
+        axios.post(`https://www.topbocce.live/wp-json/fib/v1/movie-views?id=${this.$route.params.movie_id}&views=${this.$route.params.views || 0}`)
+            .then(res => console.log('movie views updated'))
+            .catch(err => console.log(err.message))
 
         this.screenSize = window.innerWidth
 
@@ -152,7 +155,10 @@ export default {
 
     },
     methods: {
-        playVideo() {
+        YTEvent() {
+            console.log('event')
+        },
+        playYTVideo() {
             this.isPlaying = true
             this.$refs.videoPlayer.play()
         },

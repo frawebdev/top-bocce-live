@@ -15,7 +15,7 @@
         class="carousel-sport"
         >
           <router-link 
-          :to="{ name: 'sport', params: { id: sport.id }, props: { name: sport.name } }"
+          :to="{ name: 'sport', params: { id: sport.id, name: sport.name } }"
           class="column justify-center text-white focusable" style="height: 100%; width: 100%; text-decoration: none;"
           >
               <div style="margin: 0 13px 0 13px;">

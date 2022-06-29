@@ -3,6 +3,7 @@
         <div class="q-pa-md flex flex-center"
             >
             <q-pagination 
+            v-show="episodes"
             v-model="currentPage"
             :max="pages"
             input
@@ -82,6 +83,16 @@
                 />
             </div>
         </div>
+        <div class="q-pa-md flex flex-center"
+            >
+            <q-pagination 
+            v-show="episodes"
+            v-model="currentPage"
+            :max="pages"
+            input
+            input-class="text-white"
+            />
+        </div>
     </div>
 </template>
 
@@ -139,10 +150,10 @@ export default {
                 this.$router.push({ name: 'season', params: { id: ep.slug, name: ep.name, image: ep.thumbnail_url } })
             } 
             else if (ep.video_url && !ep.embed_url) {
-                this.$router.push({ name: 'video', params: { id: ep.video_url, sport: ep.episode_sport, name: ep.title.rendered } })
+                this.$router.push({ name: 'video', params: { id: ep.video_url, name: ep.title.rendered, movie_id: ep.id, views: ep.views } })
             }
             else if (ep.embed_url) {
-                this.$router.push({ name: 'video', params: { id: ep.embed_url, sport: ep.episode_sport, name: ep.title.rendered } })
+                this.$router.push({ name: 'video', params: { id: ep.embed_url, name: ep.title.rendered, movie_id: ep.id, views: ep.views } })
             }
         }   
     },

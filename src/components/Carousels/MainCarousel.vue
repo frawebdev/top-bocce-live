@@ -19,7 +19,7 @@
                   <h6 v-else-if="episode.title" class="q-ma-xs text-bold slideUpAnimation" >{{ episode.title }}</h6>
                   <q-btn
                   style="background-color: #0074a5; border-radius: 0; border: 1px solid white slideUpAnimation"
-                  v-if="episode.video_url" 
+                  v-if="episode.video_url || episode.embed_url" 
                   class="q-mt-md q-mx-sm"
                   @click="redirectTo(episode)"
                   >

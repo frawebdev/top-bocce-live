@@ -42,7 +42,7 @@
         >
           <router-link 
           class="column justify-center focusable link-style"
-          :to="{ name: 'video', params: { id: episode.video_url || null, sport: episode.movie_genre[0] || null, name: episode.title.rendered } }"
+          :to="{ name: 'video', params: { id: episode.video_url || null, name: episode.title.rendered, views: episode.views } }"
           >
               <div style="margin: 5% 10% 5% 10%;" class="text-white text-center">
                   <h6 class="q-my-xs text-bold" v-if="episode.title.rendered" v-html="episode.title.rendered"></h6>
@@ -89,10 +89,10 @@
       },
       redirectTo(ep) {
         if (ep.video_url && !ep.embed_url) {
-          this.$router.push({ name: 'video', params: { id: ep.video_url, name: ep.title.rendered } })
+          this.$router.push({ name: 'video', params: { id: ep.video_url, name: ep.title.rendered, movie_id: ep.id, views: ep.views } })
         }
         else if (ep.embed_url) {
-          this.$router.push({ name: 'video', params: { id: ep.embed_url, name: ep.title.rendered } })
+          this.$router.push({ name: 'video', params: { id: ep.embed_url, name: ep.title.rendered, movie_id: ep.id, views: ep.views } })
         }
       }
     },

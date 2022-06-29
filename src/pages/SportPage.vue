@@ -1,7 +1,7 @@
 <template>
     <q-page>
         <sport-banner 
-            :title="name"
+            :title="$route.params.name"
         />
             <episodes-grid 
             :episodes="episodes"
@@ -30,6 +30,7 @@ export default {
     },
     props: ['name'],
     async mounted() {
+        
         if(!this.$route.params.id) {
             this.$router.push('/')
         }

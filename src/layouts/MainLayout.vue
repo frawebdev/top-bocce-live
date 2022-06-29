@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header class="slideDownAnimation" elevated style="background-color: #0199da;" v-if="videos && $route.name !== 'live-page' && $route.name !== 'video'">
+    <q-header class="slideDownAnimation" elevated style="background-color: #0199da;" v-if="filterLiveNowEvents && filterLiveNowEvents.length > 0 && $route.name !== 'live-page' && $route.name !== 'video'">
       <q-toolbar class="row">
         <div class="col-8 col-md-10 row" style="overflow: hidden;">
           <p class="q-my-none q-mr-md scrolling-titles">
@@ -48,7 +48,7 @@
                   <q-menu dark auto-close anchor="top middle" self="top middle">
                     <q-list style="min-width: 300px">
                       <q-item
-                      :to="{ name: 'sport', params: { id: 216 }, props: { name: 'Volo' } }"
+                      :to="{ name: 'sport', params: { id: 216, name: 'Volo' } }"
                       >
                         <q-item-section>
                           Volo
@@ -56,13 +56,20 @@
                       </q-item>
                       <q-separator />
                       <q-item
-                      :to="{ name: 'sport', params: { id: 197 }, props: { name: 'Raffa' } }"
+                      :to="{ name: 'sport', params: { id: 197,  name: 'Raffa' } }"
                       >
                         <q-item-section>
                           Raffa
                         </q-item-section>
                       </q-item>
                       <q-separator />
+                      <q-item
+                      :to="{ name: 'sport', params: { id: 242,  name: 'Petanque' } }"
+                      >
+                        <q-item-section>
+                          Petanque
+                        </q-item-section>
+                      </q-item>
                     </q-list>
                   </q-menu>
               </q-item>
@@ -73,7 +80,7 @@
                 <q-menu dark auto-close anchor="top middle" self="top middle">
                   <q-list style="min-width: 300px">
                     <q-item
-                    :to="{ name: 'sport', params: { id: 229 }, props: { name: 'Bocce Mon Amour' } }"
+                    :to="{ name: 'sport', params: { id: 229, name: 'Bocce Mon Amour' } }"
                     >
                       <q-item-section>
                         Bocce Mon Amour
@@ -81,7 +88,7 @@
                     </q-item>
                     <q-separator />
                     <q-item
-                    :to="{ name: 'sport', params: { id: 224 }, props: { name: 'Boccia e Risposta' } }"
+                    :to="{ name: 'sport', params: { id: 224, name: 'Boccia e Risposta' } }"
                     >
                       <q-item-section>
                         Boccia e Risposta
@@ -230,7 +237,7 @@ export default defineComponent({
     })
 
     const filterLiveNowEvents = computed(() => {
-      if(videos.value.data) {
+      if(videos.value && videos.value.data) {
         return videos.value.data.filter(video => video.is_live === 1)
       }
     })
@@ -269,10 +276,10 @@ export default defineComponent({
   methods: {
       redirectTo(ep) {
         if (ep.video_url && !ep.embed_url) {
-          this.$router.push({ name: 'video', params: { id: ep.video_url, name: ep.title.rendered } })
+          this.$router.push({ name: 'video', params: { id: ep.video_url, name: ep.title.rendered, movie_id: ep.id, views: ep.views } })
         }
         else if (ep.embed_url) {
-          this.$router.push({ name: 'video', params: { id: ep.embed_url, name: ep.title.rendered } })
+          this.$router.push({ name: 'video', params: { id: ep.embed_url, name: ep.title.rendered, movie_id: ep.id, views: ep.views } })
         }
       }
   }

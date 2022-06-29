@@ -89,7 +89,7 @@ export default defineComponent({
         return res.data
       })
       
-    this.sports = await this.$api.get('/wp/v2/movie_tag?include=197,216')
+    this.sports = await this.$api.get('/wp/v2/movie_tag?include=197,216,242')
       .then(res => {
         return res.data
       })
