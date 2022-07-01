@@ -5,12 +5,12 @@
                 <button class="video-back-btn" @click="$router.go(-1)"><q-icon name="arrow_back" /></button>
             </q-toolbar>
         </q-header>
-        <FromVimeoLink 
+        <!-- <FromVimeoLink 
         v-if="Array.isArray(videoUrl)"
         :url="videoUrl[0].link"
-        />
+        /> -->
         <FromVimeoIframe 
-        v-else-if="videoUrl && videoUrl.includes('vimeo')"
+        v-if="videoUrl && videoUrl.includes('vimeo')"
         :url="$route.params.id"
         />
         <iframe

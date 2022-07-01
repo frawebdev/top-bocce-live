@@ -3,6 +3,9 @@
     <main-carousel 
     :content="featuredEpisodes"
     />    
+        <live-banner 
+        :image="liveBanner"
+        />
         <episodes-carousel 
         title="Gli ultimi episodi"
         :content="lastEpisodes"
@@ -13,6 +16,7 @@
         />
         <main-banner 
         :content="mainBanner"
+        :image="liveBanner"
         />
         <sport-carousel 
         title="Gli sport"
@@ -45,6 +49,7 @@ import EpisodesCarousel from '../components/Carousels/EpisodesCarousel.vue'
 import SeasonsCarousel from '../components/Carousels/SeasonsCarousel.vue'
 import SportCarousel from '../components/Carousels/SportCarousel.vue'
 import SkeletonCarousel from '../components/Carousels/SkeletonCarousel.vue'
+import liveBanner from '../components/Banners/LiveBanner.vue'
 import MainBanner from '../components/Banners/MainBanner.vue'
 
 export default defineComponent({
@@ -55,6 +60,7 @@ export default defineComponent({
     SeasonsCarousel,
     SportCarousel,
     SkeletonCarousel,
+    liveBanner,
     MainBanner
   },
   data() {
@@ -62,6 +68,7 @@ export default defineComponent({
       lastEpisodes: null,
       lastSeasons: null,
       featuredEpisodes: null,
+      liveBanner: null,
       mainBanner: null,
       sports: null,
       shows: null
@@ -82,6 +89,11 @@ export default defineComponent({
     this.lastSeasons = await this.$api.get('/wp/v2/movie_genre')
       .then(res => {
         return res.data
+      })
+
+    this.liveBanner = await this.$api.get('/wp/v2/posts/13558')
+      .then(res => {
+        return res.data.image
       })
 
     this.mainBanner = await this.$api.get('/wp/v2/video')

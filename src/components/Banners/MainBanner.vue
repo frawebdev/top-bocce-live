@@ -31,7 +31,7 @@
         v-if="screenSize > 600"
         >
           <q-img 
-          src='https://www.topbocce.live/wp-content/uploads/2022/05/BANNER-1-1024x576-1.png'
+          :src='image'
           />
         </div>
       </div>
@@ -50,7 +50,8 @@ export default {
     }
   },
   props: [
-    'content'
+    'content',
+    'image'
   ],
   components: {
     SkeletonCarousel
