@@ -12,15 +12,16 @@
         <FromVimeoIframe 
         v-if="videoUrl && videoUrl.includes('vimeo')"
         :url="$route.params.id"
+        class="focusable"
         />
         <iframe
         v-else-if="videoUrl && videoUrl.includes('youtube')"
         :src="$route.params.id"
         frameborder="0"
         allowfullscreen
-        class="fadeInAnimation video-position"
+        class="fadeInAnimation video-position focusable"
         />
-        <q-page-sticky position="bottom" style="z-index: 2;" :offset="[0, 35]" v-if="screenSize > 1500">
+        <!-- <q-page-sticky position="bottom" style="z-index: 2;" :offset="[0, 35]" v-if="screenSize > 1500">
             <button class="btn-style focusable q-mx-sm" @click="$router.go(-1)"><q-icon name="close" /></button>
             <button class="player-style focusable q-mx-sm" @click="$refs.videoPlayer.currentTime = $refs.videoPlayer.currentTime - 10"><q-icon name="fast_rewind" /></button>
             <button 
@@ -38,8 +39,8 @@
              <q-icon name="pause" />
              </button>
             <button class="player-style focusable q-mx-sm" @click="$refs.videoPlayer.currentTime = $refs.videoPlayer.currentTime + 10"><q-icon name="fast_forward" /></button>
-        </q-page-sticky>
-        <div class="time text-white" v-if="screenSize > 1500">{{ currentVideoTime }} / {{ videoDuration }}</div>
+        </q-page-sticky> -->
+        <!-- <div class="time text-white" v-if="screenSize > 1500">{{ currentVideoTime }} / {{ videoDuration }}</div> -->
     </q-page>
 </template>
 
