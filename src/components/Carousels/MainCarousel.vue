@@ -15,12 +15,12 @@
         >
           <div class="column justify-center col-12 col-md-6">
               <div style="margin: 5% 10% 5% 10%;" class="text-white">
-                  <h6 v-if="episode.title.rendered" class="q-my-sm text-bold title q-mx-none slideUpAnimation" v-html="episode.title.rendered"></h6>
+                  <h6 v-if="episode.title.rendered" class="q-my-sm q-px-md text-bold title q-mx-none slideUpAnimation" v-html="episode.title.rendered" style="font-size: 1.8rem;"></h6>
                   <h6 v-else-if="episode.title" class="q-ma-xs text-bold slideUpAnimation" >{{ episode.title }}</h6>
                   <q-btn
                   style="background-color: #0074a5; border-radius: 0; border: 1px solid white slideUpAnimation"
                   v-if="episode.video_url || episode.embed_url" 
-                  class="q-mt-md q-mx-sm"
+                  class="q-mt-md q-mx-md"
                   @click="redirectTo(episode)"
                   >
                   Vai al video

@@ -4,6 +4,7 @@
     class="live-banner"
     :ratio="16/9"
     :src="image"
+    @click="$router.push({ name: 'live-page' })"
     />
     <q-skeleton 
     height="25vh"

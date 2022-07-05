@@ -216,14 +216,14 @@ h1, h2, h3, h4, h5, h6 {
 
 <script>
 import { defineComponent, ref, watch, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup () {
-    const route = useRoute()
+    const router = useRouter()
 
     const screenSize = ref(null)
     const leftDrawerOpen = ref(false)
@@ -237,12 +237,12 @@ export default defineComponent({
     onMounted(() => {
       screenSize.value = window.innerWidth
 
-      // window.addEventListener('keydown', e => {
-      //   if(e.keyCode === 10009) {
-      //     alert(e.keyCode)
-      //     this.$router.push('/')
-      //   }
-      // })
+      window.addEventListener('keydown', e => {
+        if(e.keyCode === 10009) {
+          alert(e.keyCode)
+          router.go(-1)
+        }
+      })
 
       axios.get(`https://fast-peak-73010.herokuapp.com/https://topbocce.live/wp-json/wp/v2/video`)
         .then(res => videos.value = res)
