@@ -38,7 +38,6 @@
         :class="episode.video_url || episode.embed_url ? '' : 'avaliability'"
         :key="episode.id"
         @click="redirectTo(episode)"
-        @keyup="remoteClick($event, episode.video_url, episode.movie_genre[0], episode.title.rendered)"
         >
           <router-link 
           class="column justify-center focusable link-style"
@@ -81,12 +80,12 @@
       SkeletonCarousel
     },
     methods: {
-      remoteClick(e, video_url, genre, title) {
-        if(e.keyCode === 13) {
-          alert(e.keyCode)
-          this.$router.push({ name: 'video', params: { id: video_url, sport: genre, name: title } })
-        }
-      },
+      // remoteClick(e, video_url, genre, title) {
+      //   if(e.keyCode === 13) {
+      //     alert(e.keyCode)
+      //     this.$router.push({ name: 'video', params: { id: video_url, sport: genre, name: title } })
+      //   }
+      // },
       redirectTo(ep) {
         if (ep.video_url && !ep.embed_url) {
           this.$router.push({ name: 'video', params: { id: ep.video_url, name: ep.title.rendered, movie_id: ep.id, views: ep.views } })

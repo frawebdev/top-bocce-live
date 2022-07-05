@@ -1,9 +1,10 @@
 <template>
     <div class="q-ma-md">
-        <div class="q-pa-md flex flex-center"
+        <div 
+        class="q-pa-md flex flex-center"
+        v-if="pages > 0"
             >
             <q-pagination 
-            v-show="episodes"
             v-model="currentPage"
             :max="pages"
             input
@@ -83,10 +84,11 @@
                 />
             </div>
         </div>
-        <div class="q-pa-md flex flex-center"
-            >
+        <div 
+        class="q-pa-md flex flex-center"
+        v-if="pages > 0"
+        >
             <q-pagination 
-            v-show="episodes"
             v-model="currentPage"
             :max="pages"
             input
@@ -141,9 +143,14 @@ export default {
     },
     data() {
         return {
-            currentPage: 1
+            currentPage: 1,
+            events: null
         }
     },
+    // async mounted() {
+    //     this.events = await this.$api.get('/wp/v2/calendario')
+    //         .then(res => res.data)
+    // },
     methods: {
         redirectTo(ep) {
             if(ep.taxonomy) {

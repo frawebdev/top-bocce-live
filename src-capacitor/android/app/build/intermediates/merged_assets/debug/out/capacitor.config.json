@@ -1,7 +1,0 @@
-{
-  "appId": "live.topbocce.app",
-  "appName": "Top Bocce App",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www"
-}

@@ -98,6 +98,12 @@
                   </q-list>
                 </q-menu>
             </q-item>
+            <q-item
+            clickable
+            :to="{ name: 'live-page' }"
+            >
+            <q-item-section>Eventi live</q-item-section>
+            </q-item>
             <q-separator />
             <q-item 
             clickable 
@@ -231,6 +237,13 @@ export default defineComponent({
     onMounted(() => {
       screenSize.value = window.innerWidth
 
+      // window.addEventListener('keydown', e => {
+      //   if(e.keyCode === 10009) {
+      //     alert(e.keyCode)
+      //     this.$router.push('/')
+      //   }
+      // })
+
       axios.get(`https://fast-peak-73010.herokuapp.com/https://topbocce.live/wp-json/wp/v2/video`)
         .then(res => videos.value = res)
         .catch(err => console.log(err))
@@ -248,8 +261,8 @@ export default defineComponent({
         searchResult.value = await axios.get('https://fast-peak-73010.herokuapp.com/https://www.topbocce.live/wp-json/fib/v1/search?term=' + newVal)
         .then(res => {
           loadingData.value = false
-          let filteredData = res.data.filter(res => res.video_url)
-          return filteredData
+          // let filteredData = res.data.filter(res => res.video_url)
+          return res.data
         })
       }
       else {
@@ -275,6 +288,7 @@ export default defineComponent({
   },
   methods: {
       redirectTo(ep) {
+        console.log(ep)
         if (ep.video_url && !ep.embed_url) {
           this.$router.push({ name: 'video', params: { id: ep.video_url, name: ep.title.rendered, movie_id: ep.id, views: ep.views } })
         }

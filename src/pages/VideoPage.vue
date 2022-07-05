@@ -2,7 +2,7 @@
     <q-page class="column flex-center">
         <q-header style="background-color: transparent;">
             <q-toolbar style="padding-left: 0;">
-                <button class="video-back-btn" @click="$router.go(-1)"><q-icon name="arrow_back" /></button>
+                <button class="video-back-btn" @click="$router.push('/')"><q-icon name="arrow_back" /></button>
             </q-toolbar>
         </q-header>
         <!-- <FromVimeoLink 

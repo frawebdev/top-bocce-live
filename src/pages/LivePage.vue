@@ -4,10 +4,28 @@
             title="Eventi live"
         />
             <episodes-grid 
+            v-if="sortedEpisodes"
             :episodes="sortedEpisodes"
             :pages="episodesPages"
             @changePage="getNPage"
             />
+            <q-expansion-item
+            v-if="events"
+            expand-separator
+            label="Calendario eventi"
+            dark
+            style="font-size: 1.5rem;"
+            class="q-mt-md"
+            >
+                <q-list dark bordered separator style="padding: 0.5rem;">
+                    <q-item v-for="event in events" :key="event.id">
+                        <q-item-section>
+                            <q-item-label style="font-size: 1.5rem; margin-bottom: 1rem;">{{ event.acf.data_evento }}</q-item-label>
+                            <q-item-label style="font-size: 1.2rem;">{{ event.title.rendered }}</q-item-label>
+                        </q-item-section>
+                    </q-item>
+                </q-list>
+            </q-expansion-item>
     </q-page>
 </template>
 
@@ -25,10 +43,14 @@ export default {
         return {
             episodes: null,
             episodesPages: 0,
-            filteredEpisodes: {}
+            filteredEpisodes: {},
+            events: null
         }
     },
     async mounted() {
+        this.events = await this.$api.get('/wp/v2/calendario')
+            .then(res => res.data)
+
         this.episodes = await this.$api.get(`/wp/v2/video`)
             .then(res => {
                 this.episodesPages = parseInt(res.headers['x-wp-totalpages'])
